@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+require "dotenv/s3"
+require "thor"
+
+module Dotenv
+  module S3
+    class Upload < Thor
+      desc "upload -b BUCKET -f FILENAME", "upload your dotenv"
+
+      method_option :bucket,        aliases: '-b', default: nil, type: :string, option: :required
+      method_option :filename,      aliases: '-f', default: nil, type: :string, option: :required
+      method_option :base64_encode, aliases: '-m', default: false, type: :boolean
+      method_option :kms_key_id,    aliases: '-a', default: nil, type: :string
+
+      def upload
+        error_check
+        body = create_body
+        Dotenv::S3.s3_client.put_object(body: body, bucket: options.bucket, key: options.filename)
+
+        puts "uploaded #{options.bucket}/#{options.filename}"
+      end
+
+      private
+
+      def error_check
+        raise "bucket is empty" unless options.bucket
+        raise "filename is empty" unless options.filename
+      end
+
+      def create_body
+        body = File.read(options.filename)
+        body = Base64.encode64(body) if options.base64_encode
+
+        if options.kms_key_id
+          ciphertext_blob = Dotenv::S3.kms_client.encrypt(key_id: options.kms_key_id, plaintext: body).ciphertext_blob
+          body = Base64.encode64(ciphertext_blob)
+        end
+
+        body
+      end
+    end
+  end
+end
+
+Dotenv::S3::Upload.start(ARGV)
