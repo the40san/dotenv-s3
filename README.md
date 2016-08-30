@@ -41,6 +41,29 @@ Insert this code in your application initialization
 Dotenv::S3.load(bucket: "your_bucket_name", filename: "your_dotenv_file_name", base64_encoded: false, kms_key_id: nil)
 ```
 
+### rails support
+
+Please set environment variables below.
+
+ * AWS_ACCESS_KEY_ID
+ * AWS_SECRET_ACCESS_KEY
+ * AWS_REGION
+ * ENABLE_S3_ENVFILE: enable feature if it is present (boolean)
+ * ENVFILE_BUCKET_NAME: bucket name (string)
+ * ENVFILE_FILE_NAME: envfile name (string)
+ * ENVFILE_BASE64ENCODE: decode base64 if it is present (boolean)
+ * ENVFILE_KMS_KEY_ID: AWS KMS key id. decrypt by KMS if it is present (boolean)
+
+Here is example.
+Download and load base64 encoded .env file.
+
+```
+export ENABLE_S3_ENVFILE=y
+export ENVFILE_BUCKET_NAME=test-bucket
+export ENVFILE_FILE_NAME=test-envfile
+export ENVFILE_BASE64ENCODE=y
+```
+
 ## Feature
 
 * Base64 encode support (-m option)
