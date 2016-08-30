@@ -1,6 +1,8 @@
-require "dotenv/s3/version"
-require "base64"
-require "aws-sdk"
+require 'dotenv/s3/version'
+require 'dotenv/s3/rails'
+require 'base64'
+require 'aws-sdk'
+require 'tempfile'
 
 module Dotenv
   module S3
@@ -15,7 +17,13 @@ module Dotenv
 
         dotenv_body = decode64(dotenv_body) if base64_encoded
 
-        create_dotenv(dotenv_body)
+        if block_given?
+          create_tempfile(dotenv_body) do |f|
+            yield f
+          end
+        else
+          create_dotenv(dotenv_body)
+        end
       end
 
       def s3_client
@@ -44,8 +52,18 @@ module Dotenv
         kms_client.decrypt(ciphertext_blob: body).plaintext
       end
 
+      def create_tempfile(body, &block)
+        Tempfile.create("s3-dotenv") do |f|
+          f.write(body)
+          f.rewind
+          yield f
+        end
+      end
+
       def create_dotenv(body)
-        File.open('.env', 'w').write(body)
+        File.open('.env', 'w') do |f|
+          f.write(body)
+        end
       end
     end
   end
