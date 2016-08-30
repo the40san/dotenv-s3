@@ -21,8 +21,34 @@ Or install it yourself as:
     $ gem install dotenv-s3
 
 ## Usage
+### upload
 
-TODO: Write usage instructions here
+1. Create your dotenv file
+
+2. Create your bucket
+
+3. Run commands
+
+```
+export AWS_ACCESS_KEY_ID=your_access_key
+export AWS_SECRET_ACCESS_KEY=your_secret_access_key
+export AWS_REGION=your_region
+
+bundle exec dotenv-s3 upload -b your_bucket_name -f your_dotenv_file_name
+```
+
+### download
+
+Insert this code in your application initialization
+
+```
+Dotenv::S3.load(bucket: "your_bucket_name", filename: "your_dotenv_file_name", base64_encoded: false, kms_key_id: nil)
+```
+
+## Feature
+
+* Base64 encode support (-m option)
+* AWS Key Management Service support (-a KMS_KEY_ID option)
 
 ## Development
 
