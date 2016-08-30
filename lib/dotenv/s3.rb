@@ -45,7 +45,9 @@ module Dotenv
       end
 
       def create_dotenv(body)
-        File.open('.env', 'w').write(body)
+        File.open('.env', 'w') do |f|
+          f.write(body)
+        end
       end
     end
   end
