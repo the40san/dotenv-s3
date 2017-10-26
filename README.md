@@ -35,7 +35,7 @@ bundle exec dotenv-s3 upload -b your_bucket_name -f your_dotenv_file_name
 
 ### download
 
-Insert this code in your application initialization
+Insert this code in your application's initialization
 
 ```
 Dotenv::S3.load(bucket: "your_bucket_name", filename: "your_dotenv_file_name", base64_encoded: false, kms_key_id: nil)
