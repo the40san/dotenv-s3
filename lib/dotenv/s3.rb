@@ -1,7 +1,6 @@
 require 'dotenv/s3/version'
 require 'dotenv/s3/rails'
 require 'base64'
-require 'aws-sdk'
 require 'tempfile'
 
 module Dotenv

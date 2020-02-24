@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'aws-sdk', '~> 2'
+  spec.add_dependency 'aws-sdk-s3', '~> 1'
   spec.add_dependency 'thor'
   spec.add_dependency 'dotenv-rails'
   spec.add_development_dependency "bundler", "~> 1.11"
